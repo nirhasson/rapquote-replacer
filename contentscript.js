@@ -331,7 +331,7 @@ chrome.storage.local.get(["activeCategories", "quoteCount"], (res) => {
 // Load quotes from JSON
 // ---------------------------
 // ← החלף ב-URL של ה-repo שלך:
-const REMOTE_LYRICS_URL = "https://raw.githubusercontent.com/YOUR_USERNAME/rapquote-replacer/main/lyrics.json";
+const REMOTE_LYRICS_URL = "https://raw.githubusercontent.com/nirhasson/rapquote-replacer/main/lyrics.json";
 
 async function loadQuotesSafely() {
   try {
