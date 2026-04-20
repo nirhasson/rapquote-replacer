@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RapQuoteReplacer</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup">
+
+    <div class="header">
+      <div class="header-left">
+        <span class="logo">🎤</span>
+        <div>
+          <div class="title">RapQuote</div>
+          <div class="subtitle">Replacer</div>
+        </div>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" id="enableToggle" checked>
+        <span class="toggle-track">
+          <span class="toggle-thumb"></span>
+        </span>
+      </label>
+    </div>
+
+    <div class="stat-bar">
+      <span class="stat-icon">🔁</span>
+      <span><span id="replacementCount">0</span> quotes replaced on this page</span>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Categories</span>
+        <button id="randomizeBtn" class="link-btn">🎲 Shuffle</button>
+      </div>
+      <div class="categories-grid">
+        <label class="chip"><input type="checkbox" value="humor" checked><span>😂 Humor</span></label>
+        <label class="chip"><input type="checkbox" value="inspiration" checked><span>✨ Inspiration</span></label>
+        <label class="chip"><input type="checkbox" value="ego" checked><span>👑 Ego</span></label>
+        <label class="chip"><input type="checkbox" value="gangsta" checked><span>🔥 Gangsta</span></label>
+        <label class="chip"><input type="checkbox" value="chill" checked><span>😎 Chill</span></label>
+        <label class="chip"><input type="checkbox" value="protest" checked><span>✊ Protest</span></label>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Quotes per article</span>
+        <span class="slider-value" id="sliderValue">3</span>
+      </div>
+      <div class="slider-row">
+        <span class="slider-label">1</span>
+        <input type="range" id="quoteCount" min="1" max="10" value="3" class="slider">
+        <span class="slider-label">10</span>
+      </div>
+    </div>
+
+    <button id="applyBtn" class="apply-btn">Apply Changes</button>
+
+    <div class="footer">Hover replaced quotes to see song info</div>
+
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

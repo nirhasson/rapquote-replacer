@@ -1,0 +1,36 @@
+.rap-quote-replaced {
+  background-color: rgba(255, 215, 0, 0.25);
+  border-radius: 6px;
+  padding: 3px 5px;
+  font-style: italic;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.rap-quote-replaced:hover {
+  background-color: rgba(255, 215, 0, 0.4);
+  transform: scale(1.03);
+}
+
+.rap-tooltip-container {
+  position: absolute;
+  background: #222;
+  color: white;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.4;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+  max-width: 250px;
+}
+
+.rap-tooltip-container a {
+  color: #ffd700;
+  margin-right: 6px;
+  text-decoration: none;
+}
+
+.rap-tooltip-container a:hover {
+  text-decoration: underline;
+}
