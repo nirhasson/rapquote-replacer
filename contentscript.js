@@ -367,10 +367,17 @@ async function loadQuotesSafely() {
 // ---------------------------
 function collectReplacableNodes() {
   const nodes = Array.from(document.querySelectorAll(
-    "p, blockquote, [itemprop='articleBody'], [itemprop='articleBody'] p, " +
+    "p, blockquote, " +
+    "[itemprop='articleBody'], [itemprop='articleBody'] p, " +
     "div.article, div.article-content, div.textBody, " +
     ".article-body p, .post-content p, .entry-content p, " +
-    "[class*='article-body'] p, [class*='articleBody'] p, [class*='article_body'] p"
+    "[class*='article-body'] p, [class*='articleBody'] p, [class*='article_body'] p, " +
+    // כאן / KAN
+    "[class*='article'] p, [class*='content'] p, " +
+    "[class*='story'] p, [class*='news'] p, " +
+    // כותרות משנה + תקצירים (לציטוטים בבולטים)
+    "h2, h3, [class*='subtitle'], [class*='summary'], [class*='lead'], [class*='intro'], " +
+    "[class*='bullet'], [class*='highlight']"
   ));
   // Add only new nodes (don't overwrite original HTML already stored)
   nodes.forEach(node => {
