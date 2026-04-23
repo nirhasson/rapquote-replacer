@@ -268,23 +268,17 @@ function containsPolitician(text) {
   return politicians.some(p => new RegExp(`(?:^|[\\s,״"'(])${escapeRegex(p)}(?=$|[\\s,״"'.!?)])`, "iu").test(text));
 }
 
-// Returns true if a politician appears in the article's h1/title — marks it as a political article
-// Cached so querySelector + regex loop don't run on every node in the article.
-let _isPoliticalArticleCache = null;
+// Returns true if a politician appears in the article's h1/title.
 function isPoliticalArticle() {
-  if (_isPoliticalArticleCache !== null) return _isPoliticalArticleCache;
   const h1 = document.querySelector("h1");
   const title = document.title || "";
   const headingText = (h1?.textContent || "") + " " + title;
-  _isPoliticalArticleCache = containsPolitician(headingText);
-  return _isPoliticalArticleCache;
+  return containsPolitician(headingText);
 }
 
 // Check if a politician is mentioned near the quote.
-// In political articles (politician in title): 250 chars back, 150 forward.
-// In non-political articles: require much tighter proximity (80 chars back only).
-function politicianNearMatch(nodeText, matchIndex, matchLength) {
-  const political = isPoliticalArticle();
+// political=true: 250 chars back, 150 forward. false: 80 back, 40 forward.
+function politicianNearMatch(nodeText, matchIndex, matchLength, political) {
   const window_back = political ? 250 : 80;
   const window_fwd  = political ? 150 : 40;
   const start = Math.max(0, matchIndex - window_back);
@@ -415,7 +409,8 @@ function replaceQuotesOnNodes() {
   if (!isEnabled) return;
   if (replacementCount >= MAX_REPLACEMENTS_PER_PAGE) return;
   let foundCount = 0;
-  const [regexA, regexB, regexC] = buildQuoteRegexes(); // A = western, B = Hebrew reversed, C = English inverted
+  const political = isPoliticalArticle(); // computed once per run — avoids stale cache on SPAs
+  const [regexA, regexB, regexC] = buildQuoteRegexes();
 
   replacableNodes.forEach(container => {
     // Fast pre-filter: skip containers with no politician mention at all
@@ -444,13 +439,11 @@ function replaceQuotesOnNodes() {
 
       // Proximity check: politician must appear near this specific quote.
       // In non-political articles, skip the parent fallback — it's too broad.
-      if (!politicianNearMatch(textNode.nodeValue, match.index, match[0].length)) {
-        if (!isPoliticalArticle()) {
-              continue;
-        }
+      if (!politicianNearMatch(textNode.nodeValue, match.index, match[0].length, political)) {
+        if (!political) continue;
         const parentText = textNode.parentElement?.textContent || "";
         const parentMatchIdx = parentText.indexOf(match[0]);
-        if (parentMatchIdx === -1 || !politicianNearMatch(parentText, parentMatchIdx, match[0].length)) {
+        if (parentMatchIdx === -1 || !politicianNearMatch(parentText, parentMatchIdx, match[0].length, political)) {
           continue;
         }
       }
@@ -515,7 +508,6 @@ function removeReplacedQuotes() {
   });
   replacementCount = 0;
   usedQuoteIds.clear();
-  _isPoliticalArticleCache = null;
 }
 
 // ---------------------------
