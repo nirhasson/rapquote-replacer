@@ -221,6 +221,10 @@ const speechMarkers = [
   "מסר", "מסרה", "סיפר", "סיפרה", "פירט", "פירטה", "הגיב", "הגיבה",
   "השיב", "השיבה", "הבהיר", "הבהירה", "התייחס", "התייחסה", "סיכם", "סיכמה",
   "כתב", "כתבה", "צייץ", "ציצה", "קרא", "קראה",
+  "תקף", "תקפה", "האשים", "האשימה", "דרש", "דרשה",
+  "פנה", "פנתה", "צעק", "צעקה", "כינה", "הכריז", "הכריזה",
+  "שאל", "שאלה", "ענה", "ענתה", "הזהיר", "הזהירה",
+  "קבע", "קבעה", "טען בפני", "אמר לעיתונאים", "מסר לתקשורת",
   // ניסוחים מורכבים
   "עוד נכתב", "נכתב כי", "נמסר", "נמסר כי", "טען כי", "הבהיר כי",
   "ציין כי", "הוסיף ואמר", "אמר כי", "הגיב ואמר", "עוד הוסיף",
@@ -379,10 +383,11 @@ function collectReplacableNodes() {
 // Replace quotes with tooltip + YouTube link
 // ---------------------------
 
-// Quote character classes (open and close kept separate so typographic pairs match)
-const QUOTE_OPEN = `["\u{201C}״\u{05F4}]`;    // " (ASCII), " (U+201C), ״ / U+05F4
-const QUOTE_CLOSE = `["\u{201D}״\u{05F4}]`;    // " (ASCII), " (U+201D), ״ / U+05F4
-const QUOTE_INNER = `[^"\u{201C}\u{201D}״\u{05F4}]{3,1500}`; // up to 1500 chars (long politician quotes)
+// Quote character classes
+// Negative lookbehind (?<![א-ת]) prevents matching " inside Hebrew abbreviations (יו"ר, עו"ד, ח"כ)
+const QUOTE_OPEN  = `(?<![א-ת])["\u{201C}״\u{05F4}]`;
+const QUOTE_CLOSE = `["\u{201D}״\u{05F4}](?![א-ת])`;
+const QUOTE_INNER = `[^"\u{201C}\u{201D}״\u{05F4}]{3,1500}`;
 
 // Pattern A: Western style  — speechMarker ... "quote"  (e.g. Trump said "we won", Trump told reporters: "we won")
 // Pattern B: Hebrew style   — "quote" ... speechMarker  (e.g. ״אנחנו ננצח״, אמר טראמפ)
